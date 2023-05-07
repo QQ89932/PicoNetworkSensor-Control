@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Raspberry Pico W</title>
+    </head>
+    <body>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js" id="jquery-3-js"></script> <!-- Import jQuery library -->
+        <script>
+        $(document).ready(function() { // Execute the following code when the page has finished loading
+            function ajax_func(action) { // Define a function named ajax_func, which will send a GET request to the URL of action
+                $.ajax({ // Send an asynchronous request
+                    type: 'GET', // Request type
+                    url: action, // Request URL
+                    async:true, // Asynchronous request
+                    timeout: 5000, // Timeout is 5 seconds
+                    dataType:'json', // Data type is JSON
+                    data: { // Send an empty data
+                    },
+                    error: function (e) { // Callback function when an error occurs
+                    },
+                    success: function(n) { // Callback function when the request is successful, n is the returned data
+                        if(action=='?onnew_vlaue=1'){ // If the request URL is '?onnew_vlaue=1'
+                            $('#newvalue').html(n); // Put the returned data into the element with id newvalue
+                            setTimeout(() => { // Execute the following code after a delay of 500 milliseconds
+                                   ajax_func(action); // Execute the ajax_func function again
+                            }, 500);
+                         }
+                    },
+                    complete: function() { // Callback function when the request is completed
+                    }
+                });
+            }
+            ajax_func('?onnew_vlaue=1'); // Call the ajax_func function and pass '?onnew_vlaue=1' as a parameter
+            $('#led_1').unbind().on('click', function() { // When the button with id led_1 is clicked, execute the following code
+                ajax_func('?onboard_led=1'); // Call the ajax_func function and pass '?onboard_led=1' as a parameter
+            });
+            $('#led_2').unbind().on('click', function() { // When the button with id led_2 is clicked, execute the following code
+                ajax_func('?onboard_led=0'); // Call the ajax_func function and pass '?onboard_led=0' as a parameter
+            });
+        });
+        </script>
+        <h3>Raspberry Pico W</h3> <!-- Page title -->
+        <p>Control LED on/off</p > <!-- Page content -->
+        <button id="led_1">Light On</button>&nbsp; <!-- Show the button with id led_1 -->
+        <button id="led_2">Light Off</button>&nbsp; <!-- Show the button with id led_2 -->
+        <p>Sensor dynamic value</p > <!-- Page content -->
+        <button id="newvalue">0</button> <!-- Show the button with id newvalue -->
+	</body>
+</html>
